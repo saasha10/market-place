@@ -180,6 +180,7 @@ EXPO_PUBLIC_FIREBASE_APP_ID=...
 EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID=...
 ```
 Crea y completa `.env` (o usa `.env.local`) y reinicia Metro.
+Ya hemos creado una app Web en Firebase y rellenado `.env` automáticamente usando MCP.
 ## Solución de problemas
 
 - Android: abre Android Studio, instala SDKs, crea/arranca un AVD
