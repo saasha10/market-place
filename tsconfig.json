@@ -11,7 +11,8 @@
       "@/hooks/*": ["src/hooks/*"],
       "@/services/*": ["src/services/*"],
       "@/utils/*": ["src/utils/*"],
-      "@/types/*": ["src/types/*"]
+      "@/types/*": ["src/types/*"],
+      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],

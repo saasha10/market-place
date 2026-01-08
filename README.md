@@ -181,6 +181,18 @@ EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID=...
 ```
 Crea y completa `.env` (o usa `.env.local`) y reinicia Metro.
 Ya hemos creado una app Web en Firebase y rellenado `.env` automáticamente usando MCP.
+### Firebase Auth: "auth/configuration-not-found"
+
+Si ves este error al registrarte o iniciar sesión, normalmente significa que el método de autenticación no está habilitado en Firebase.
+
+Pasos para habilitar Email/Password:
+- Ve a https://console.firebase.google.com/ → tu proyecto.
+- Menú: Authentication → Sign-in method.
+- Habilita "Email/Password" y guarda.
+- Reinicia la app (detén Metro y vuelve a `npx expo start`).
+
+Además, la app ahora muestra mensajes más claros ante errores de Auth (mapeo de errores comunes y sugerencias).
+
 ## Solución de problemas
 
 - Android: abre Android Studio, instala SDKs, crea/arranca un AVD
