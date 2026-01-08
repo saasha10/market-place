@@ -5,7 +5,13 @@ export type Admin = {
   createdAt: number; // timestamp ms
 };
 
-export type ProductStatus = 'available' | 'sold' | 'archived';
+export type ProductStatus = 'available' | 'reserved' | 'sold' | 'archived';
+
+export type ReservedSize = {
+  size: string;
+  reservedBy: string; // buyerUserId
+  reservedAt: number;
+};
 
 export type Product = {
   id: string;
@@ -13,12 +19,16 @@ export type Product = {
   description?: string;
   price: number; // cents
   sizes: string[]; // e.g., ['S','M','L']
+  reservedSizes?: ReservedSize[]; // sizes currently reserved
   photos: string[]; // storage download URLs
   ownerAdminId: string; // Admin UID
   status: ProductStatus;
+  condition?: string; // e.g., 'new', 'like-new', 'good', 'fair'
   createdAt: number; // timestamp ms
   updatedAt?: number; // timestamp ms
 };
+
+export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
 
@@ -37,8 +47,10 @@ export type Order = {
   id: string;
   productId: string;
   buyerUserId: string;
+  selectedSize: string; // size selected for reservation
   shippingAddress: ShippingAddress;
   paymentStatus: PaymentStatus;
+  orderStatus: OrderStatus; // pending/processing/shipped/delivered/cancelled
   paymentIntentId?: string;
   createdAt: number;
   updatedAt?: number;
@@ -49,5 +61,7 @@ export type UserProfile = {
   email: string;
   displayName?: string;
   phone?: string;
+  savedAddresses?: ShippingAddress[];
+  isAdmin?: boolean; // flag if user can sell
   createdAt: number;
 };

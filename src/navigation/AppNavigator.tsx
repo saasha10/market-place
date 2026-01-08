@@ -1,6 +1,9 @@
 import LoginScreen from '@/screens/auth/LoginScreen';
 import RegisterScreen from '@/screens/auth/RegisterScreen';
 import HomeScreen from '@/screens/home/HomeScreen';
+import ProductDetail from '@/screens/products/ProductDetail';
+import ProductsList from '@/screens/products/ProductsList';
+import ShippingCheckout from '@/screens/checkout/ShippingCheckout';
 import { watchAuthState } from '@/services/auth';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -12,6 +15,10 @@ export type RootStackParamList = {
   AuthLogin: undefined;
   AuthRegister: undefined;
   App: undefined;
+  Home: undefined;
+  Products: undefined;
+  ProductDetail: { productId: string };
+  ShippingCheckout: { orderId: string; productId: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -39,7 +46,20 @@ export default function AppNavigator() {
     return (
       <Stack.Navigator>
         {isAuthenticated ? (
-          <Stack.Screen name="App" component={HomeScreen} options={{ headerShown: false }} />
+          <Stack.Group>
+            <Stack.Screen name="App" component={HomeScreen} options={{ title: 'MarketPlace' }} />
+            <Stack.Screen name="Products" component={ProductsList} options={{ title: 'Marketplace' }} />
+            <Stack.Screen
+              name="ProductDetail"
+              component={ProductDetail}
+              options={{ title: 'Product Details' }}
+            />
+            <Stack.Screen
+              name="ShippingCheckout"
+              component={ShippingCheckout}
+              options={{ title: 'Shipping Address' }}
+            />
+          </Stack.Group>
         ) : (
           <Stack.Group>
             <Stack.Screen name="AuthLogin" component={LoginScreen} options={{ title: 'Sign In' }} />

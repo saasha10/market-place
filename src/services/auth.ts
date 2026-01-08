@@ -12,6 +12,10 @@ export function watchAuthState(cb: (user: User | null) => void) {
   return onAuthStateChanged(auth, cb);
 }
 
+export function getCurrentUser(): User | null {
+  return auth.currentUser;
+}
+
 export async function signIn(email: string, password: string) {
   const res = await signInWithEmailAndPassword(auth, email.trim(), password);
   return res.user;
