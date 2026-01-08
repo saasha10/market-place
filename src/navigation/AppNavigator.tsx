@@ -1,4 +1,5 @@
 import LoginScreen from '@/screens/auth/LoginScreen';
+import RegisterScreen from '@/screens/auth/RegisterScreen';
 import HomeScreen from '@/screens/home/HomeScreen';
 import { watchAuthState } from '@/services/auth';
 
@@ -8,7 +9,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
 export type RootStackParamList = {
-  Auth: undefined;
+  AuthLogin: undefined;
+  AuthRegister: undefined;
   App: undefined;
 };
 
@@ -35,11 +37,18 @@ export default function AppNavigator() {
       );
     }
     return (
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator>
         {isAuthenticated ? (
-          <Stack.Screen name="App" component={HomeScreen} />
+          <Stack.Screen name="App" component={HomeScreen} options={{ headerShown: false }} />
         ) : (
-          <Stack.Screen name="Auth" component={LoginScreen} />
+          <Stack.Group>
+            <Stack.Screen name="AuthLogin" component={LoginScreen} options={{ title: 'Sign In' }} />
+            <Stack.Screen
+              name="AuthRegister"
+              component={RegisterScreen}
+              options={{ title: 'Create Account' }}
+            />
+          </Stack.Group>
         )}
       </Stack.Navigator>
     );

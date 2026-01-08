@@ -1,5 +1,6 @@
 import { RootStackParamList } from '@/navigation/AppNavigator';
-import { signIn } from '@/services/auth';
+import { register } from '@/services/auth';
+import { createUserProfile } from '@/services/users';
 import { friendlyAuthError } from '@/utils/firebaseErrors';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -15,26 +16,38 @@ import {
   View,
 } from 'react-native';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'AuthLogin'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'AuthRegister'>;
 
-export default function LoginScreen({ navigation }: Props) {
+export default function RegisterScreen({ navigation }: Props) {
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [loading, setLoading] = useState(false);
 
-  async function handleSignIn() {
+  async function handleRegister() {
+    if (!email || !password) {
+      Alert.alert('Validation', 'Email and password are required');
+      return;
+    }
+    if (password.length < 6) {
+      Alert.alert('Validation', 'Password must be at least 6 characters');
+      return;
+    }
+    if (password !== confirm) {
+      Alert.alert('Validation', 'Passwords do not match');
+      return;
+    }
     try {
       setLoading(true);
-      await signIn(email, password);
+      const user = await register(email, password);
+      await createUserProfile(user, { displayName: fullName });
+      // Auth gate will redirect; optionally navigate back
     } catch (e: any) {
-      Alert.alert('Sign in failed', friendlyAuthError(e));
+      Alert.alert('Registration failed', friendlyAuthError(e));
     } finally {
       setLoading(false);
     }
-  }
-
-  function goRegister() {
-    navigation.replace('AuthRegister');
   }
 
   return (
@@ -43,7 +56,13 @@ export default function LoginScreen({ navigation }: Props) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={styles.form}>
-        <Text style={styles.title}>Welcome</Text>
+        <Text style={styles.title}>Create your account</Text>
+        <TextInput
+          placeholder="Full name"
+          value={fullName}
+          onChangeText={setFullName}
+          style={styles.input}
+        />
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
@@ -59,15 +78,26 @@ export default function LoginScreen({ navigation }: Props) {
           onChangeText={setPassword}
           style={styles.input}
         />
+        <TextInput
+          placeholder="Confirm password"
+          secureTextEntry
+          value={confirm}
+          onChangeText={setConfirm}
+          style={styles.input}
+        />
         <TouchableOpacity
           disabled={loading}
-          onPress={handleSignIn}
+          onPress={handleRegister}
           style={[styles.button, loading && styles.buttonDisabled]}
         >
-          <Text style={styles.buttonText}>{loading ? 'Loading…' : 'Sign In'}</Text>
+          <Text style={styles.buttonText}>{loading ? 'Creating…' : 'Create account'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity disabled={loading} onPress={goRegister} style={styles.linkButton}>
-          <Text style={styles.linkText}>Create an account</Text>
+        <TouchableOpacity
+          disabled={loading}
+          onPress={() => navigation.replace('AuthLogin')}
+          style={styles.linkButton}
+        >
+          <Text style={styles.linkText}>Already have an account? Sign in</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
