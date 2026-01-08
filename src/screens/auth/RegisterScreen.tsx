@@ -5,16 +5,8 @@ import { friendlyAuthError } from '@/utils/firebaseErrors';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { Button, Text, TextInput } from 'react-native-paper';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AuthRegister'>;
 
@@ -56,15 +48,19 @@ export default function RegisterScreen({ navigation }: Props) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={styles.form}>
-        <Text style={styles.title}>Create your account</Text>
+        <Text variant="headlineMedium" style={styles.title}>
+          Create your account
+        </Text>
         <TextInput
-          placeholder="Full name"
+          label="Full name"
+          mode="outlined"
           value={fullName}
           onChangeText={setFullName}
           style={styles.input}
         />
         <TextInput
-          placeholder="Email"
+          label="Email"
+          mode="outlined"
           autoCapitalize="none"
           keyboardType="email-address"
           value={email}
@@ -72,33 +68,38 @@ export default function RegisterScreen({ navigation }: Props) {
           style={styles.input}
         />
         <TextInput
-          placeholder="Password"
+          label="Password"
+          mode="outlined"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
           style={styles.input}
         />
         <TextInput
-          placeholder="Confirm password"
+          label="Confirm password"
+          mode="outlined"
           secureTextEntry
           value={confirm}
           onChangeText={setConfirm}
           style={styles.input}
         />
-        <TouchableOpacity
-          disabled={loading}
+        <Button
+          mode="contained"
           onPress={handleRegister}
-          style={[styles.button, loading && styles.buttonDisabled]}
-        >
-          <Text style={styles.buttonText}>{loading ? 'Creating…' : 'Create account'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+          loading={loading}
           disabled={loading}
+          style={styles.button}
+        >
+          Create account
+        </Button>
+        <Button
+          mode="text"
           onPress={() => navigation.replace('AuthLogin')}
+          disabled={loading}
           style={styles.linkButton}
         >
-          <Text style={styles.linkText}>Already have an account? Sign in</Text>
-        </TouchableOpacity>
+          Already have an account? Sign in
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );
@@ -106,24 +107,9 @@ export default function RegisterScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-  form: { width: '100%', maxWidth: 360 },
-  title: { fontSize: 28, fontWeight: '600', marginBottom: 16 },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 12,
-  },
-  button: {
-    backgroundColor: '#111827',
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonDisabled: { opacity: 0.6 },
-  buttonText: { color: 'white', fontWeight: '600' },
-  linkButton: { paddingVertical: 12, alignItems: 'center' },
-  linkText: { color: '#2563eb', fontWeight: '500' },
+  form: { width: '100%', maxWidth: 360, gap: 8 },
+  title: { marginBottom: 16, textAlign: 'center' },
+  input: { marginBottom: 8 },
+  button: { marginTop: 8 },
+  linkButton: { marginTop: 8 },
 });

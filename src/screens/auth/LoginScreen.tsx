@@ -4,16 +4,8 @@ import { friendlyAuthError } from '@/utils/firebaseErrors';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { Button, Text, TextInput } from 'react-native-paper';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AuthLogin'>;
 
@@ -43,9 +35,12 @@ export default function LoginScreen({ navigation }: Props) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={styles.form}>
-        <Text style={styles.title}>Welcome</Text>
+        <Text variant="headlineMedium" style={styles.title}>
+          Welcome
+        </Text>
         <TextInput
-          placeholder="Email"
+          label="Email"
+          mode="outlined"
           autoCapitalize="none"
           keyboardType="email-address"
           value={email}
@@ -53,22 +48,25 @@ export default function LoginScreen({ navigation }: Props) {
           style={styles.input}
         />
         <TextInput
-          placeholder="Password"
+          label="Password"
+          mode="outlined"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
           style={styles.input}
         />
-        <TouchableOpacity
-          disabled={loading}
+        <Button
+          mode="contained"
           onPress={handleSignIn}
-          style={[styles.button, loading && styles.buttonDisabled]}
+          loading={loading}
+          disabled={loading}
+          style={styles.button}
         >
-          <Text style={styles.buttonText}>{loading ? 'Loading…' : 'Sign In'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity disabled={loading} onPress={goRegister} style={styles.linkButton}>
-          <Text style={styles.linkText}>Create an account</Text>
-        </TouchableOpacity>
+          Sign In
+        </Button>
+        <Button mode="text" onPress={goRegister} disabled={loading} style={styles.linkButton}>
+          Create an account
+        </Button>
       </View>
     </KeyboardAvoidingView>
   );
@@ -76,24 +74,9 @@ export default function LoginScreen({ navigation }: Props) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 },
-  form: { width: '100%', maxWidth: 360 },
-  title: { fontSize: 28, fontWeight: '600', marginBottom: 16 },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 12,
-  },
-  button: {
-    backgroundColor: '#111827',
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonDisabled: { opacity: 0.6 },
-  buttonText: { color: 'white', fontWeight: '600' },
-  linkButton: { paddingVertical: 12, alignItems: 'center' },
-  linkText: { color: '#2563eb', fontWeight: '500' },
+  form: { width: '100%', maxWidth: 360, gap: 8 },
+  title: { marginBottom: 16, textAlign: 'center' },
+  input: { marginBottom: 8 },
+  button: { marginTop: 8 },
+  linkButton: { marginTop: 8 },
 });
